@@ -1,0 +1,50 @@
+.button {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  width: 76px;
+  height: 32px;
+  background-color: black;
+  color: white;
+  border-radius: 3px;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 0.2s linear;
+}
+
+.button__signup {
+  margin-left: auto;
+  margin-right: 30px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  padding: 0;
+  width: 77px;
+  height: 32px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s linear;
+}
+
+.button__signup:hover {
+  opacity: 0.6;
+}
+
+.button:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 540px) {
+  .button {
+    font-size: 10px;
+    line-height: 16px;
+    width: 54px;
+    height: 26px;
+  }
+
+  .button__signup {
+    margin-right: 14px;
+    font-size: 10px;
+  }
+}
