@@ -6,10 +6,10 @@ function NavAuth() {
   return (
     <nav className="nav__auth">
       <Link to="/signup">
-        <button className="button__signup">Регистрация</button>
+        <button className="nav__button-signup">Регистрация</button>
       </Link>
       <Link to="/signin">
-        <button className="button">Войти</button>
+        <button className="nav__button">Войти</button>
       </Link>
     </nav>
   );

@@ -1,4 +1,4 @@
-.button {
+.nav__button {
   font-size: 12px;
   line-height: 16px;
   font-weight: 500;
@@ -12,7 +12,7 @@
   transition: opacity 0.2s linear;
 }
 
-.button__signup {
+.nav__button-signup {
   margin-left: auto;
   margin-right: 30px;
   font-size: 12px;
@@ -27,23 +27,23 @@
   transition: opacity 0.2s linear;
 }
 
-.button__signup:hover {
+.nav__button-signup:hover {
   opacity: 0.6;
 }
 
-.button:hover {
+.nav__button:hover {
   opacity: 0.6;
 }
 
 @media screen and (max-width: 540px) {
-  .button {
+  .nav__button {
     font-size: 10px;
     line-height: 16px;
     width: 54px;
     height: 26px;
   }
 
-  .button__signup {
+  .nav__button-signup {
     margin-right: 14px;
     font-size: 10px;
   }

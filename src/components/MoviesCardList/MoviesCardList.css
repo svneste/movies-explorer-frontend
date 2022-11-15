@@ -62,6 +62,12 @@
   border-radius: 6px;
   font-size: 12px;
   margin-top: 50px;
+  cursor: pointer;
+  transition: opacity 0.3s linear;
+}
+
+.nextmovies__nextmovies-button:hover {
+  opacity: 0.6;
 }
 
 .moviescardlist__savebutton {
