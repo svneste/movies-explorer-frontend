@@ -1,0 +1,13 @@
+.popup__place {
+  background-color: #f2f2f7;
+  position: fixed;
+  display: flex;
+  width: 73%;
+  height: 100vh;
+  top: 0;
+  right: 0;
+}
+
+.popup__place-hedden {
+  display: none;
+}

@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
@@ -10,9 +10,16 @@ import Register from "./Register/Register";
 import Login from "./Login/Login";
 import NotFound from "./NotFound/NotFound";
 import SavedMovies from "./SavedMovies/SavedMovies";
+// import PopupMenu from "./PopupMenu/PopupMenu";
 
 function App() {
   const { pathname } = useLocation();
+  // const [isOpenMenu, setIsOpenMenu] = useState(false);
+//   const isOpenMenu = true;
+
+  // function handleOpenMenuPopup() {
+  //   setIsOpenMenu(!isOpenMenu);
+  // }
 
   return (
     <div className="App">
@@ -20,7 +27,9 @@ function App() {
       pathname === "/movies" ||
       pathname === "/saved-movies" ||
       pathname === "/profile" ? (
-        <Header />
+        <Header
+
+         />
       ) : (
         ""
       )}
@@ -42,6 +51,8 @@ function App() {
       ) : (
         ""
       )}
+
+
     </div>
   );
 }
