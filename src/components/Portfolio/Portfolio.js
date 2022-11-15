@@ -7,24 +7,29 @@ function Portfolio() {
     <section className="portfolio">
       <h3 className="portfolio__title">Портфолио</h3>
       <ul className="portfolio__items">
-        <a href="https://github.com/svneste/how-to-learn" target="blank">
-          <li className="portfolio__item">
+        <li className="portfolio__item">
+          <a href="https://github.com/svneste/how-to-learn" target="blank">
             Статичный сайт
             <img className="portfolio__icon" src={icon} alt="иконка" />
-          </li>
-        </a>
-        <a href="https://github.com/svneste/sprint3-travel" target="blank">
-          <li className="portfolio__item">
+          </a>
+        </li>
+
+        <li className="portfolio__item">
+          <a href="https://github.com/svneste/sprint3-travel" target="blank">
             Адаптивный сайт
             <img className="portfolio__icon" src={icon} alt="иконка" />
-          </li>
-        </a>
-        <a href="https://github.com/svneste/react-mesto-api-full" target="blank">
-          <li className="portfolio__item">
+          </a>
+        </li>
+
+        <li className="portfolio__item">
+          <a
+            href="https://github.com/svneste/react-mesto-api-full"
+            target="blank"
+          >
             Одностраничное приложение
             <img className="portfolio__icon" src={icon} alt="иконка" />
-          </li>
-        </a>
+          </a>
+        </li>
       </ul>
     </section>
   );

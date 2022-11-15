@@ -55,6 +55,12 @@
   font-size: 14px;
   border-radius: 3px;
   margin-top: 69px;
+  cursor: pointer;
+  transition: opacity 0.4s linear;
+}
+
+.form__button-signup:hover {
+  opacity: 0.4;
 }
 
 .form__label-signup {
@@ -87,6 +93,7 @@
   .register {
     max-width: 85%;
     padding-top: 59px;
+
   }
 
   .logo-center {

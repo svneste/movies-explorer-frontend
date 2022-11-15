@@ -18,15 +18,14 @@ function Login() {
         <label className="form__label">Пароль</label>
         <input className="form__input no-margin" type="password" />
         <p className="form__error-message">Что-то пошло не так ...</p>
+        <button className="form__button-signup">Войти</button>
+        <span className="form__label-signup">
+          Еще не зарегистрированы?{" "}
+          <Link className="form__label-signup-link" to="/signup">
+            Регистрация
+          </Link>
+        </span>
       </form>
-
-      <button className="form__button-signup">Войти</button>
-      <span className="form__label-signup">
-        Еще не зарегистрированы?{" "}
-        <Link className="form__label-signup-link" to="/signup">
-          Регистрация
-        </Link>
-      </span>
     </section>
   );
 }

@@ -20,7 +20,9 @@ function MoviesCardList() {
       <ul className="moviescardlist__items">
         <li className="moviescardlist__item">
           <img src={film1} className="moviescardlist__pic" alt="картинка 1" />
+
           <button className="moviescardlist__savebutton">Сохранить</button>
+
           <div className="moviescard__info">
             <p className="moviescard__name">33 слова о дизайне</p>
             <p className="moviescard__duration">1ч 17м</p>
@@ -29,15 +31,17 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film2} className="moviescardlist__pic" alt="картинка 1" />
-          <img src={iconSuccess} className="moviescardlist-icon" alt="иконка" />
+          <button className="moviescardlist-icon"></button>
+
           <div className="moviescard__info">
             <p className="moviescard__name">Киноальманах «100 лет дизайна»</p>
             <p className="moviescard__duration">1ч 17м</p>
           </div>
         </li>
-
         <li className="moviescardlist__item">
           <img src={film3} className="moviescardlist__pic" alt="картинка 1" />
+
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">В погоне за Бенкси</p>
@@ -48,6 +52,8 @@ function MoviesCardList() {
         <li className="moviescardlist__item">
           <img src={film4} className="moviescardlist__pic" alt="картинка 1" />
 
+          <button className="moviescardlist__savebutton">Сохранить</button>
+
           <div className="moviescard__info">
             <p className="moviescard__name">Баския: Взрыв реальности</p>
             <p className="moviescard__duration">1ч 17м</p>
@@ -56,6 +62,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film5} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">Бег это свобода</p>
@@ -65,6 +72,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film6} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">Книготорговцы</p>
@@ -74,6 +82,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film7} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">Когда я думаю о Германии ночью</p>
@@ -83,6 +92,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film8} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">
@@ -94,7 +104,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film9} className="moviescardlist__pic" alt="картинка 1" />
-
+          <button className="moviescardlist__savebutton">Сохранить</button>
           <div className="moviescard__info">
             <p className="moviescard__name">
               Дженис: Маленькая девочка грустит
@@ -105,6 +115,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film10} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">Соберись перед прыжком</p>
@@ -114,6 +125,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film11} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">
@@ -125,6 +137,7 @@ function MoviesCardList() {
 
         <li className="moviescardlist__item">
           <img src={film12} className="moviescardlist__pic" alt="картинка 1" />
+          <button className="moviescardlist__savebutton">Сохранить</button>
 
           <div className="moviescard__info">
             <p className="moviescard__name">

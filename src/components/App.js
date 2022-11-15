@@ -10,16 +10,19 @@ import Register from "./Register/Register";
 import Login from "./Login/Login";
 import NotFound from "./NotFound/NotFound";
 import SavedMovies from "./SavedMovies/SavedMovies";
-// import PopupMenu from "./PopupMenu/PopupMenu";
+import * as auth from "../utils/auth.js";
+
 
 function App() {
   const { pathname } = useLocation();
-  // const [isOpenMenu, setIsOpenMenu] = useState(false);
-//   const isOpenMenu = true;
 
-  // function handleOpenMenuPopup() {
-  //   setIsOpenMenu(!isOpenMenu);
-  // }
+  const handleRegister = (name, email, password) => {
+    console.log('отработал submit auth');
+    auth
+        .register(name, email, password)
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err))
+  }
 
   return (
     <div className="App">
@@ -39,7 +42,7 @@ function App() {
         <Route path="/movies" element={<Movies />} />
         <Route path="/saved-movies" element={<SavedMovies />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<Register />} />
+        <Route path="/signup" element={<Register handleRegister={handleRegister} />} />
         <Route path="/signin" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
