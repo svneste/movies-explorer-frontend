@@ -1,0 +1,152 @@
+.moviescardlist {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-top: 70px;
+}
+
+.moviescardlist__items {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.moviescardlist__item {
+  max-width: 360px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.moviescard__name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 250px;
+}
+
+.moviescard__info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-left: 8px;
+  padding-right: 8px;
+  align-items: center;
+  height: 32px;
+}
+
+.moviescard__duration {
+  margin: 0;
+  width: 52px;
+  height: 18px;
+  background-color: #f9f9f9;
+  color: #a0a0a0;
+  font-size: 11px;
+  text-align: center;
+  line-height: 12px;
+  padding-top: 6px;
+  border-radius: 3px;
+}
+
+.moviescardlist__nextmovies {
+  display: flex;
+}
+
+.nextmovies__nextmovies-button {
+  margin: 0 auto;
+  width: 320px;
+  height: 36px;
+  background: #f9f9f9;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-top: 50px;
+  cursor: pointer;
+  transition: opacity 0.3s linear;
+}
+
+.nextmovies__nextmovies-button:hover {
+  opacity: 0.6;
+}
+
+.moviescardlist__savebutton {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 72px;
+  height: 21px;
+  font-size: 10px;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.2s linear;
+}
+
+.moviescardlist__savebutton:hover {
+  opacity: 0.4;
+}
+
+.moviescardlist-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 21px;
+  height: 21px;
+  background-color: transparent;
+  border: none;
+  background-image: url('../../images/success.svg');
+  cursor: pointer;
+  transition: opacity 0.2s linear;
+}
+
+.moviescardlist-icon:hover {
+  opacity: 0.4;
+}
+
+@media screen and (max-width: 1280px) {
+  .moviescardlist__items {
+    justify-content: space-around;
+  }
+
+  .search__input-container {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search__input-container {
+    max-width: 90%;
+  }
+
+  .search__line {
+    margin-top: 50px;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .moviescardlist__items {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .moviescard__info {
+    max-width: 90%;
+  }
+
+  /* .moviescardlis__image-container {
+    max-width: 90%;
+  } */
+
+  .moviescardlist__pic {
+
+    height: auto;
+    width: 100%;
+  }
+
+  .nextmovies__nextmovies-button {
+    max-width: 80%;
+  }
+
+}
