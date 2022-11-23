@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Main from "./Main/Main";
@@ -11,51 +11,226 @@ import Login from "./Login/Login";
 import NotFound from "./NotFound/NotFound";
 import SavedMovies from "./SavedMovies/SavedMovies";
 import * as auth from "../utils/auth.js";
-
+import api from "../utils/MainApi";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Popup from "./Popup/Popup";
+import Preloader from "./Preloader/Preloader";
 
 function App() {
   const { pathname } = useLocation();
+  const [saveMoviesCard, setSaveMoviesCard] = useState([]);
+  const [filmsLike, setFilmsLike] = useState(false);
+  const [textPopup, setTextPopup] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [isOpenPreloader, setIsOpenPreloader] = useState(false);
+  const history = useNavigate();
+
+  function handleLogin() {
+    setLoggedIn({
+      loggedIn: true,
+    });
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      auth
+        .checkToken(token)
+        .then(() => {
+          handleLogin();
+          history("/movies");
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loggedIn) {
+      api
+        .getUserInfo()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [loggedIn, currentUser]);
 
   const handleRegister = (name, email, password) => {
-    console.log('отработал submit auth');
+    setIsOpenPreloader(true);
     auth
-        .register(name, email, password)
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err))
+      .register(name, email, password)
+      .then(() => {
+        setIsOpenPreloader(false);
+        handleOpenPopup("Вы успешно зарегистрированы");
+        history("/movies");
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsOpenPreloader(false);
+      });
+  };
+
+  const handleAutorize = (email, password) => {
+    setIsOpenPreloader(true);
+    auth
+      .autorize(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          handleLogin();
+          setIsOpenPreloader(false);
+          history("/movies");
+        } else {
+          console.log("Ошибка - в ответе нет токена");
+          return;
+        }
+      })
+      .catch(() => {
+        console.log("возникла ошибка");
+      });
+  };
+
+  function handleUpdateUser(name, email) {
+    api.editUserProfile(name, email).then(
+      (res) => {
+        handleOpenPopup("Данные обновлены");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  // Выход из аккаунта пользователя
+
+  function handleOutSign() {
+    setLoggedIn(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("wordsCompare");
+    localStorage.removeItem("films");
+    history("/");
+  }
+
+  // Сохранение карточки фильма, добавление карточки в избранное
+
+  function handleAddNewMovieCard(data) {
+    api
+      .addNewMovie(data) //обращаемся к API - сохраняем нашу карточку в БД
+      .then((res) => {
+        //нужно показать что карточка была сохранена
+        setSaveMoviesCard([res, ...saveMoviesCard]);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleSaveMovie(movie) {
+    console.log(movie);
+    setFilmsLike(!filmsLike);
+  }
+
+  // Удаление карточки из сохраненных
+  function handleRemoveMovieCard(id) {
+    api
+      .removeMovieCard(id)
+      .then((res) => {
+        handleOpenPopup("Карточка успешно удалена");
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleOpenPopup(text) {
+    setTextPopup(text);
+    setIsOpenPopup(!isOpenPopup);
   }
 
   return (
     <div className="App">
-      {pathname === "/" ||
-      pathname === "/movies" ||
-      pathname === "/saved-movies" ||
-      pathname === "/profile" ? (
-        <Header
+      <CurrentUserContext.Provider value={currentUser}>
+        {pathname === "/" ||
+        pathname === "/movies" ||
+        pathname === "/saved-movies" ||
+        pathname === "/profile" ? (
+          <Header loggedIn={loggedIn} />
+        ) : (
+          ""
+        )}
 
-         />
-      ) : (
-        ""
-      )}
+        <Routes>
+          <Route exact path="/" element={<Main />} />
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route
+              path="/movies"
+              element={
+                <Movies
+                  // handleGetMovies={handleGetMovies}
+                  handleAddNewMovieCard={handleAddNewMovieCard}
+                  handleOpenPopup={handleOpenPopup}
+                  isOpenPreloader={isOpenPreloader}
+                  //data={filterMovies}
+                  handleSaveMovie={handleSaveMovie}
+                  loggedIn={loggedIn}
+                  //filmsLike={filmsLike}
+                />
+              }
+            />
+            <Route
+              path="/saved-movies"
+              element={
+                <SavedMovies
+                  saveMoviesCard={saveMoviesCard}
+                  handleRemoveMovieCard={handleRemoveMovieCard}
+                  handleOpenPopup={handleOpenPopup}
+                />
+              }
+            />
+          </Route>
 
-      <Routes>
-        <Route exact path="/" element={<Main />} />
-        <Route path="/movies" element={<Movies />} />
-        <Route path="/saved-movies" element={<SavedMovies />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<Register handleRegister={handleRegister} />} />
-        <Route path="/signin" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route
+            path="/profile"
+            element={
+              <Profile
+                handleOutSign={handleOutSign}
+                handleUpdateUser={handleUpdateUser}
+              />
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <Register
+                handleRegister={handleRegister}
+                isOpenPreloader={isOpenPreloader}
+              />
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <Login
+                handleAutorize={handleAutorize}
+                isOpenPreloader={isOpenPreloader}
+              />
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
 
-      {pathname === "/" ||
-      pathname === "/movies" ||
-      pathname === "/saved-movies" ? (
-        <Footer />
-      ) : (
-        ""
-      )}
-
-
+        {pathname === "/" ||
+        pathname === "/movies" ||
+        pathname === "/saved-movies" ? (
+          <Footer />
+        ) : (
+          ""
+        )}
+      </CurrentUserContext.Provider>
+      <Popup
+        isOpenPopup={isOpenPopup}
+        handleOpenPopup={handleOpenPopup}
+        textPopup={textPopup}
+      />
     </div>
   );
 }
