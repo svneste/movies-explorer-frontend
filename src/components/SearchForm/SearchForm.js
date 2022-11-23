@@ -9,7 +9,9 @@ function SearchForm({
   isChecked,
 }) {
   const [checked, setChecked] = useState(false);
-  const [data, setData] = useState("");
+  const [data, setData] = useState({
+    wordsCompare: "",
+  });
 
   function handleChecked(e) {
     const newChecked = !checked;

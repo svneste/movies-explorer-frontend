@@ -76,9 +76,9 @@ function SavedMovies(props) {
             />
           ))}
         </ul>
-        <div className="moviescardlist__nextmovies">
+        {/* <div className="moviescardlist__nextmovies">
           <button className="nextmovies__nextmovies-button">Еще</button>
-        </div>
+        </div> */}
       </section>
     </section>
   );
