@@ -76,7 +76,6 @@ function Movies(props) {
       setWordsCompare(localStorage.textSearch);
       setIsChecked(isChecked);
       setVisibleMovieCards(JSON.parse(localStorage.films));
-      console.log("отрабатывает хук");
     }
   }, []);
 
@@ -130,6 +129,7 @@ function Movies(props) {
   }
 
   function filterShortMovies() {
+    console.log('работает чек');
     return visibleMovieCards.filter((item) => item.duration <= 40);
   }
 

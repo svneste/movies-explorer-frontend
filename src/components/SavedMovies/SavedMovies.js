@@ -13,6 +13,7 @@ function SavedMovies(props) {
       .getSaveMoviesCard()
       .then((res) => {
         setSaveMoviesCard(res);
+        localStorage.setItem("saveFilms", JSON.stringify(res));
         console.log(res);
       })
       .catch((err) => {
@@ -46,9 +47,24 @@ function SavedMovies(props) {
     })
   }
 
+  function searchShortMovies(newChecked) {
+    if (newChecked) {
+      const shortMovies = filterShortMovies();
+      setSaveMoviesCard(shortMovies);
+    } else {
+      setSaveMoviesCard(JSON.parse(localStorage.saveFilms))
+      console.log('сработало false');
+    }
+  }
+
+  function filterShortMovies() {
+    console.log('работает чек');
+    return saveMoviesCard.filter((item) => item.duration <= 40);
+  }
+
   return (
     <section className="movies">
-      <SearchForm handleGetMovies={searchInSaveMovies} handleOpenPopup={props.handleOpenPopup} />
+      <SearchForm handleGetMovies={searchInSaveMovies} handleOpenPopup={props.handleOpenPopup} searchShortMovies={searchShortMovies}/>
       <section className="moviescardlist">
         <ul className="moviescardlist__items">
           {saveMoviesCard.map((item, id) => (

@@ -14,7 +14,7 @@ function SearchForm({
   function handleChecked(e) {
     const newChecked = !checked;
     setChecked(newChecked);
-    //searchShortMovies(newChecked);
+    searchShortMovies(newChecked);
   }
 
   function handleChange(e) {
