@@ -8,4 +8,4 @@
 
 ## Доступ к проекту:
 Ссылка на макет: https://disk.yandex.ru/d/dx_A_3K7F7AMxQ
-Ссылка на пул реквест:
+Ссылка на пул реквест: https://github.com/svneste/movies-explorer-frontend/tree/level-3
