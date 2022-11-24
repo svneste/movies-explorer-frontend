@@ -21,6 +21,7 @@ function MovieCard(props) {
   function addNewMovie() {
     props.handleAddNewMovieCard(props.card);
     props.handleSaveMovie(movieCard);
+    props.handleLike(movieCard);
   }
 
   function deleteCardMovie() {
@@ -44,11 +45,10 @@ function MovieCard(props) {
           type="button"
           onClick={addNewMovie}
           className={`moviescardlist__savebutton ${
-            props.filmsLike && "moviescardlist__savebutton-hidden moviescardlist-icon"
+            props.isLike &&
+            "moviescardlist__savebutton-hidden moviescardlist-icon"
           }`}
-        >
-
-        </button>
+        ></button>
       ) : (
         <button
           type="button"

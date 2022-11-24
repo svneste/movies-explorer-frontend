@@ -4,7 +4,13 @@ import "./MoviesCardList.css";
 import MovieCard from "../MoviesCard/MoviesCard";
 
 function MoviesCardList(props) {
+  const [isLike, setIsLike] = useState(false);
   const { pathname } = useLocation();
+
+  function handleLike(card) {
+    setIsLike(!isLike);
+    console.log(card);
+  }
 
   function handleIndex() {
     props.handleIndex();
@@ -19,6 +25,8 @@ function MoviesCardList(props) {
             card={item}
             key={id}
             handleSaveMovie={props.handleSaveMovie}
+            handleLike={handleLike}
+            isLike={isLike}
           />
         ))}
       </ul>

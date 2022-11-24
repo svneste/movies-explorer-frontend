@@ -64,7 +64,7 @@ function SearchForm({
           <input
             name="checked"
             defaultValue={checked}
-            checked={checked}
+            defaultChecked={checked}
             onChange={handleChecked}
             className="search__checkbox"
             type="checkbox"
