@@ -74,7 +74,7 @@ function Movies(props) {
 
     if (filmMovies) {
       setWordsCompare(localStorage.textSearch);
-      setIsChecked(isChecked);
+      setIsChecked(localStorage.сhecked);
       setVisibleMovieCards(JSON.parse(localStorage.films));
     }
   }, []);

@@ -1,6 +1,12 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useLocation,
+  useHistory,
+  Switch,
+} from "react-router-dom";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Main from "./Main/Main";
@@ -26,13 +32,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const [isOpenPreloader, setIsOpenPreloader] = useState(false);
-  const history = useNavigate();
-
-  function handleLogin() {
-    setLoggedIn({
-      loggedIn: true,
-    });
-  }
+  const history = useHistory();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,8 +40,8 @@ function App() {
       auth
         .checkToken(token)
         .then(() => {
-          handleLogin();
-          history("/movies");
+          setLoggedIn(true);
+          history.push("/movies");
         })
         .catch((err) => console.log(err));
     }
@@ -80,9 +80,9 @@ function App() {
       .then((data) => {
         if (data.token) {
           localStorage.setItem("token", data.token);
-          handleLogin();
+          setLoggedIn(true);
           setIsOpenPreloader(false);
-          history("/movies");
+          history.push("/movies");
         } else {
           console.log("Ошибка - в ответе нет токена");
           return;
@@ -111,7 +111,7 @@ function App() {
     localStorage.removeItem("token");
     localStorage.removeItem("wordsCompare");
     localStorage.removeItem("films");
-    history("/");
+    history.push("/");
   }
 
   // Сохранение карточки фильма, добавление карточки в избранное
@@ -158,65 +158,56 @@ function App() {
           ""
         )}
 
-        <Routes>
-          <Route exact path="/" element={<Main />} />
-          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-            <Route
-              path="/movies"
-              element={
-                <Movies
-                  // handleGetMovies={handleGetMovies}
-                  handleAddNewMovieCard={handleAddNewMovieCard}
-                  handleOpenPopup={handleOpenPopup}
-                  isOpenPreloader={isOpenPreloader}
-                  //data={filterMovies}
-                  handleSaveMovie={handleSaveMovie}
-                  loggedIn={loggedIn}
-                  //filmsLike={filmsLike}
-                />
-              }
-            />
-            <Route
-              path="/saved-movies"
-              element={
-                <SavedMovies
-                  saveMoviesCard={saveMoviesCard}
-                  handleRemoveMovieCard={handleRemoveMovieCard}
-                  handleOpenPopup={handleOpenPopup}
-                />
-              }
+        <Switch>
+          <Route exact path="/">
+            <Main />
+          </Route>
+
+          <Route path="/signin">
+            <Login
+              handleAutorize={handleAutorize}
+              isOpenPreloader={isOpenPreloader}
             />
           </Route>
 
-          <Route
+          <Route path="/signup">
+            <Register
+              handleRegister={handleRegister}
+              isOpenPreloader={isOpenPreloader}
+            />
+          </Route>
+
+          <ProtectedRoute
+            path="/movies"
+            component={Movies}
+            handleAddNewMovieCard={handleAddNewMovieCard}
+            handleOpenPopup={handleOpenPopup}
+            isOpenPreloader={isOpenPreloader}
+            handleSaveMovie={handleSaveMovie}
+            loggedIn={loggedIn}
+          />
+
+          <ProtectedRoute
+            path="/saved-movies"
+            component={SavedMovies}
+            saveMoviesCard={saveMoviesCard}
+            handleRemoveMovieCard={handleRemoveMovieCard}
+            handleOpenPopup={handleOpenPopup}
+            loggedIn={loggedIn}
+          />
+
+          <ProtectedRoute
             path="/profile"
-            element={
-              <Profile
-                handleOutSign={handleOutSign}
-                handleUpdateUser={handleUpdateUser}
-              />
-            }
+            component={Profile}
+            handleOutSign={handleOutSign}
+            handleUpdateUser={handleUpdateUser}
+            loggedIn={loggedIn}
           />
-          <Route
-            path="/signup"
-            element={
-              <Register
-                handleRegister={handleRegister}
-                isOpenPreloader={isOpenPreloader}
-              />
-            }
-          />
-          <Route
-            path="/signin"
-            element={
-              <Login
-                handleAutorize={handleAutorize}
-                isOpenPreloader={isOpenPreloader}
-              />
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+
+          <Route path="*">
+            <NotFound />
+          </Route>
+        </Switch>
 
         {pathname === "/" ||
         pathname === "/movies" ||

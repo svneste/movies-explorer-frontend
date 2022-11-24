@@ -5,23 +5,17 @@ import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 import NavAuth from "../NavAuth/NavAuth";
 
-function Header(loggedIn) {
+function Header(props) {
   const { pathname } = useLocation();
+  const tre = true;
 
   return (
     <header className={`header ${pathname !== "/" ? "header__icon_menu" : ""}`}>
       <Link to="/">
         <img src={logo} alt="Логотип компании" className="header__logo" />
       </Link>
-      {pathname === "/movies" ||
-      pathname === "/saved-movies" ||
-      pathname === "/profile" ? (
-        <Navigation />
-      ) : loggedIn ? (
-        <NavAuth />
-      ) : (
-        <Navigation />
-      )}
+
+      {props.loggedIn ? <Navigation /> : <NavAuth />}
     </header>
   );
 }
