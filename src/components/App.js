@@ -49,14 +49,21 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      api
-        .getUserInfo()
-        .then((res) => {
-          setCurrentUser(res);
-        })
-        .catch((err) => console.log(err));
+      getUserInfo();
     }
-  }, [loggedIn, currentUser]);
+  }, [loggedIn]);
+
+
+  function getUserInfo() {
+    api
+      .getUserInfo()
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   const handleRegister = (name, email, password) => {
     setIsOpenPreloader(true);

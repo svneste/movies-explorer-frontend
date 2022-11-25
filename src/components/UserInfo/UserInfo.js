@@ -18,6 +18,15 @@ function UserInfo({ handleOutSign, handleUpdateUser }) {
     const name = target.name;
     const value = target.value;
 
+    if (name === "name" || name === "email") {
+      if (value === currentUser.name) {
+        target.setCustomValidity("Введите другое имя");
+      } else {
+        target.setCustomValidity("");
+      }
+    }
+
+
     if (name === "email") {
       if (!isEmail(value)) {
         target.setCustomValidity("Некорректый адрес почты");
@@ -26,36 +35,18 @@ function UserInfo({ handleOutSign, handleUpdateUser }) {
       }
     }
 
+
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: target.validationMessage });
     setIsValid(target.closest("form").checkValidity());
   };
 
-  // const [data, setData] = useState({
-  //   name: "",
-  //   email: currentUser.email,
-  // });
-
-  // function handleChange(e) {
-  //   const { name, value } = e.target;
-  //   setData((oldData) => ({
-  //     ...oldData,
-  //     [name]: value,
-  //   }));
-
-  //   if (data.name !== currentUser.name || data.name !== currentUser.email) {
-  //     setVisibleButton(true);
-  //   } else {
-  //     setVisibleButton(false);
-  //   }
-  // }
 
   function handleSubmit(e) {
     e.preventDefault();
 
     let { name, email } = values;
-    console.log(name);
-    console.log(email);
+
     handleUpdateUser(name, email);
   }
 
