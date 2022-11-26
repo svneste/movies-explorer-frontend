@@ -2,37 +2,38 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./MoviesCardList.css";
 import MovieCard from "../MoviesCard/MoviesCard";
+function checkMovieFavorite(movies, movie) {
+  return movies.some((someMovie) => someMovie.movieId === movie.id);
+}
 
-function MoviesCardList(props) {
-  const [isLike, setIsLike] = useState(false);
+function MoviesCardList({
+  favoriteMovies,
+  addNewFavoriteMovie,
+  removeFavoriteMovie,
+  visibleMovies,
+  hiddenMovies,
+  showMore,
+}) {
   const { pathname } = useLocation();
-
-  function handleIndex() {
-    props.handleIndex();
-  }
 
   return (
     <section className="moviescardlist">
       <ul className="moviescardlist__items">
-        {props.movieCard.map((item, id) => (
+        {Array.isArray(visibleMovies) && visibleMovies.map((item, id) => (
           <MovieCard
             card={item}
             key={id}
-            handleSaveMovie={props.handleSaveMovie}
-            isLike={isLike}
-            saveMovies={props.saveMovies}
-            handleSaceMovies={props.handleSaceMovies}
-            addLikeCard={props.addLikeCard}
-            handleAddNewMovieCard={props.handleAddNewMovieCard}
-            films={props.films}
+            isFavorite={checkMovieFavorite(favoriteMovies, item)}
+            handleAddNewMovieCard={addNewFavoriteMovie}
+            removeFavoriteMovie={removeFavoriteMovie}
           />
         ))}
       </ul>
-      {props.films.length > 0 && pathname !== "/saved-movies" && (
+      {Array.isArray(hiddenMovies) && hiddenMovies.length > 0 && pathname !== "/saved-movies" && (
         <div className="moviescardlist__nextmovies">
           <button
             type="button"
-            onClick={handleIndex}
+            onClick={showMore}
             className="nextmovies__nextmovies-button"
           >
             Еще

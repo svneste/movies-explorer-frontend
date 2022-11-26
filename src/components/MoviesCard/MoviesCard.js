@@ -4,11 +4,9 @@ import "./MoviesCard.css";
 
 function MovieCard(props) {
   const { pathname } = useLocation();
-  const  [saveCards, setSavecards] = useState(false);
 
   let imageURL;
   let movieCard = props.card;
-
 
   if (pathname === "/saved-movies") {
     imageURL = props.card.image;
@@ -22,13 +20,10 @@ function MovieCard(props) {
 
   function addNewMovie() {
     props.handleAddNewMovieCard(movieCard);
-
-    setSavecards(props.addLikeCard);
   }
 
   function deleteCardMovie() {
-    props.handleRemoveMovieCard(movieCard._id);
-    props.deleteCardInArr(movieCard._id);
+    props.removeFavoriteMovie(movieCard);
   }
 
   return (
@@ -45,9 +40,9 @@ function MovieCard(props) {
       {pathname === "/movies" ? (
         <button
           type="button"
-          onClick={addNewMovie}
+          onClick={props.isFavorite ? deleteCardMovie : addNewMovie}
           className={`moviescardlist__savebutton ${
-            saveCards &&
+            props.isFavorite &&
             "moviescardlist__savebutton-hidden moviescardlist-icon"
           }`}
         ></button>

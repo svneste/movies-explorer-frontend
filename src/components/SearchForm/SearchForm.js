@@ -2,57 +2,51 @@ import React, { useState, useEffect } from "react";
 import "./SearchForm.css";
 
 function SearchForm({
-  handleGetMovies,
+  updateMovieList,
   handleOpenPopup,
-  wordsCompare,
-  searchShortMovies,
-  isChecked,
 }) {
-  const [checked, setChecked] = useState(false);
-  const [data, setData] = useState({
-    wordsCompare: "",
-  });
 
-  function handleChecked(e) {
-    const newChecked = !checked;
-    setChecked(newChecked);
-    searchShortMovies(newChecked);
+  const [checked, setChecked] = useState(localStorage.getItem("checked") === "true");
+
+  const [textSearch, setTextSearch] = useState(localStorage.getItem("textSearch"));
+
+  function handleChecked() {
+
+    setChecked((prev) => {
+      const newChecked = !prev;
+      localStorage.setItem("checked", newChecked);
+      return newChecked;
+    })
+    updateMovieList();
   }
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setData((oldData) => ({
-      ...oldData,
-      [name]: value,
-    }));
+  function handleTextChange(e) {
+    const newTextSearch = e.target.value;
+    setTextSearch(newTextSearch);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    let { wordsCompare } = data;
-    if (wordsCompare === "") {
+    if (!textSearch) {
       handleOpenPopup("Нужно ввести ключевое слово");
     } else {
-      handleGetMovies(wordsCompare, checked);
+      updateMovieList();
+      localStorage.setItem("textSearch", textSearch);
     }
   }
-
-  // useEffect(() => {
-  //   setChecked(isChecked);
-  // }, [isChecked]);
 
   return (
     <section className="searchform">
       <form onSubmit={handleSubmit} className="search">
         <div className="search__input-container">
           <input
-            onChange={handleChange}
+            onChange={handleTextChange}
             id="wordsCompare"
             name="wordsCompare"
             className="search__input"
             placeholder="Фильм"
             type="text"
-            defaultValue={wordsCompare || ""}
+            value={textSearch || ""}
             required
           />
           <button type="submit" className="search__button">
@@ -63,9 +57,7 @@ function SearchForm({
         <label className="search__toogle-container">
           <input
             name="checked"
-            //defaultValue='false'
             defaultChecked={checked}
-           // checked='checked'
             onChange={handleChecked}
             className="search__checkbox"
             type="checkbox"

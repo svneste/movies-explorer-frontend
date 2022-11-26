@@ -9,6 +9,7 @@ import Preloader from "../Preloader/Preloader";
 function SavedMovies(props) {
   const [saveMoviesCard, setSaveMoviesCard] = useState([]);
   const [isOpenPreloader, setIsOpenPreloader] = useState(false);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
   let filter = [];
 
   useEffect(() => {
@@ -40,19 +41,42 @@ function SavedMovies(props) {
 
   }
 
-  function deleteCardInArr (id) {
-    let newArrDeleteCard = []; // создаем новый массив в который добавляем карточки без удаленного
-    console.log(id);
-    console.log(saveMoviesCard);
-    saveMoviesCard.forEach(function(obj) {
-      if (obj._id !== id) {
-        newArrDeleteCard.push(obj);
-      } else {
-        console.log(localStorage.getItem.saveFilms);
-      }
-      setSaveMoviesCard(newArrDeleteCard);
+  // function deleteCardInArr (id) {
+  //   let newArrDeleteCard = [];
+  //   console.log(id);
+  //   console.log(saveMoviesCard);
+  //   saveMoviesCard.forEach(function(obj) {
+  //     if (obj._id !== id) {
+  //       newArrDeleteCard.push(obj);
+  //     } else {
+  //       console.log(localStorage.getItem.saveFilms);
+  //     }
+  //     setSaveMoviesCard(newArrDeleteCard);
 
-    })
+  //   })
+  // }
+
+   async function removeFavoriteMovie(movie) {
+    const favoriteMovie = favoriteMovies.find(
+      (someMovie) => someMovie.movieId === movie.id
+    );
+    if (favoriteMovie) {
+      await api.removeMovieCard(favoriteMovie._id);
+      await fetchFavoriteMovies();
+    }
+  }
+
+  useEffect(() => {
+    fetchFavoriteMovies();
+  }, []);
+
+  async function fetchFavoriteMovies() {
+    try {
+      const favoriteMovies = await api.getSaveMoviesCard();
+      setFavoriteMovies(favoriteMovies);
+    } catch (err) {
+      props.handleOpenPopup("При сохранении карточки возникла ошибка");
+    }
   }
 
   function searchShortMovies(newChecked) {
@@ -83,7 +107,7 @@ function SavedMovies(props) {
               card={item}
               key={id}
               handleRemoveMovieCard={props.handleRemoveMovieCard}
-              deleteCardInArr={deleteCardInArr}
+              removeFavoriteMovie={removeFavoriteMovie}
             />
           ))}
         </ul>

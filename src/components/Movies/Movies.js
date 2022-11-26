@@ -7,16 +7,55 @@ import api from "../../utils/MainApi";
 import * as moviesApi from "../../utils/MoviesApi";
 
 function Movies(props) {
-  const [films, setFilms] = useState([]);
-  const [saveMovies, setSaveMovies] = useState([]);
-  const [filterMovies, setFilterMovies] = useState([]);
-  const [visibleMovieCards, setVisibleMovieCards] = useState([]);
-  const [wordsCompare, setWordsCompare] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
-  const [shortMovies, setShortMovies] = useState([]);
   const [isOpenPreloader, setIsOpenPreloader] = useState(false);
   const [conutMovies, setConutMovies] = useState([]);
-  const [addLikeCard, setAddLikeCard] = useState(false);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+  const [allMovies, setAllMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [visibleMovies, setVisibleMovies] = useState([]);
+  const [hiddenMovies, setHiddenMovies] = useState([]);
+
+  console.log({favoriteMovies, allMovies, filteredMovies, visibleMovies, hiddenMovies});
+
+  useEffect(() => {
+    let localStorageAllMovies = localStorage.getItem("allMovies");
+
+    if (localStorageAllMovies) {
+      setAllMovies(JSON.parse(localStorageAllMovies));
+    } else {
+      updateMovieList();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(allMovies) && allMovies.length > 0) {
+      const checked = localStorage.getItem("checked") === "true";
+      const textSearch = localStorage.getItem("textSearch");
+
+      const filteredMovies = allMovies.filter(function (item) {
+        return item.nameRU
+          .toLowerCase()
+          .includes(textSearch.toLowerCase().trim());
+      });
+
+      if (checked) {
+        setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40));
+      } else {
+        setFilteredMovies(filteredMovies);
+      }
+    }
+  }, [allMovies]);
+
+  useEffect(() => {
+    const clonedFilteredMovies = [...filteredMovies];
+
+    const visibleMovies = clonedFilteredMovies.splice(0, conutMovies[0]);
+    setVisibleMovies(visibleMovies);
+
+    setHiddenMovies(clonedFilteredMovies);
+  }, [filteredMovies, conutMovies]);
+
+  console.log({filteredMovies});
 
   useEffect(() => {
     setConutMovies(getMoviesCount());
@@ -47,145 +86,80 @@ function Movies(props) {
     return countElement;
   }
 
-  useEffect(() => {
-    let dataLocalFilter = localStorage.getItem('films');
-
-    if (dataLocalFilter) {
-      setWordsCompare(localStorage.textSearch);
-      setIsChecked(localStorage.сhecked);
-      setVisibleMovieCards(JSON.parse(localStorage.films));
-      setFilms(JSON.parse(localStorage.allFilms));
-    } else {
-      console.log('Пустое хранилище');
-    }
-  }, []);
-
-  useEffect(() => {
-    api
-      .getSaveMoviesCard()
-      .then((res) => {
-        setSaveMovies(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, [])
-
-  async function handleGetMovies(wordsCompare, checked) {
-    if (!localStorage.getItem("allFilms")) {
+  async function updateMovieList() {
+    if (!localStorage.getItem("allMovies")) {
       try {
         setIsOpenPreloader(true);
-
-        const allFilms = await moviesApi.getMovies();
-        setFilms(allFilms);
-
-        addAllMoviesInLocalStorage(allFilms);
-
-        handleFilterMovies(wordsCompare, checked);
-
+        const allMovies = await moviesApi.getMovies();
+        setAllMovies(allMovies);
+        localStorage.setItem("allMovies", JSON.stringify(allMovies));
         setIsOpenPreloader(false);
       } catch (err) {
         console.log("Асинхронная функция завершилась с ошибкой" + err);
       }
     } else {
-      let dataLocalAllFilms = JSON.parse((localStorage.allFilms));
-      setFilms(dataLocalAllFilms);
-      handleFilterMovies(wordsCompare, checked);
+      const allMoviesLocalStorage = JSON.parse(localStorage.getItem("allMovies"));
+      setAllMovies(allMoviesLocalStorage);
     }
   }
 
-  function handleFilterMovies(wordsCompare, checked) {
-    let filter = [];
-    filter = films.filter(function (item) {
-      return item.nameRU.toLowerCase().includes(wordsCompare.toLowerCase());
-    });
-    if (filter.length === 0) {
-      props.handleOpenPopup("Ничего не найдено");
-    }
-    addFilterReqInLocalStorage(wordsCompare, checked, filter);
+  function showMore() {
+    const clonedFilteredMovies = [...filteredMovies];
 
-    setFilterMovies(filter);
+    const newVisibleMovies = clonedFilteredMovies.splice(0, conutMovies[1] + visibleMovies.length);
+    setVisibleMovies(newVisibleMovies);
 
-    const showedMovies = filter.splice(0, conutMovies[0]);
-    setVisibleMovieCards(showedMovies);
+    setHiddenMovies(clonedFilteredMovies);
   }
 
-  function addAllMoviesInLocalStorage(allFilms) {
-    localStorage.setItem("allFilms", JSON.stringify(allFilms));
-  }
-
-  function addFilterReqInLocalStorage(wordsCompare, checked, filter) {
-    localStorage.setItem("textSearch", wordsCompare);
-    localStorage.setItem("films", JSON.stringify(filter));
-    localStorage.setItem("checked", checked);
-  }
-
-    function handleIndex() {
-      const spliceFilms = filterMovies;
-      const newArr = visibleMovieCards.concat(
-        spliceFilms.splice(0, conutMovies[1])
-      );
-      setVisibleMovieCards(newArr);
-      setFilterMovies(spliceFilms);
-
-    }
-
-  async function handleAddNewMovieCard(movieCard) {
-    // console.log(movieCard.id);
-    // console.log(saveMovies);
-    // console.log(films);
+  async function addNewFavoriteMovie(movie) {
     try {
-      await api.addNewMovie(movieCard);
-      const newArrSaveCards = await api.getSaveMoviesCard();
-      setSaveMovies(newArrSaveCards);
+      await api.addNewMovie(movie);
+      await fetchFavoriteMovies();
     } catch (err) {
-      props.handleOpenPopup('При сохранении карточки возникла ошибка');
-    }
-
-    saveMovies.map((c) => {
-      if (c.id === movieCard.id) {
-        setAddLikeCard(true);
-      }
-    })
-  }
-
-
-  function searchShortMovies(newChecked) {
-    if (newChecked) {
-      const shortMovies = filterShortMovies();
-      setShortMovies(shortMovies);
-      setVisibleMovieCards(shortMovies);
-    } else {
-      setVisibleMovieCards(JSON.parse(localStorage.films));
+      props.handleOpenPopup("При сохранении карточки возникла ошибка");
     }
   }
 
-  function filterShortMovies() {
-    console.log("работает чек");
-    return visibleMovieCards.filter((item) => item.duration <= 40);
+  useEffect(() => {
+    fetchFavoriteMovies();
+  }, []);
+
+  async function fetchFavoriteMovies() {
+    try {
+      const favoriteMovies = await api.getSaveMoviesCard();
+      setFavoriteMovies(favoriteMovies);
+    } catch (err) {
+      props.handleOpenPopup("При сохранении карточки возникла ошибка");
+    }
   }
 
+  async function removeFavoriteMovie(movie) {
+    const favoriteMovie = favoriteMovies.find(
+      (someMovie) => someMovie.movieId === movie.id
+    );
+    if (favoriteMovie) {
+      await api.removeMovieCard(favoriteMovie._id);
+      await fetchFavoriteMovies();
+    }
+  }
 
   return (
     <section className="movies">
       <SearchForm
-        handleGetMovies={handleGetMovies}
         handleOpenPopup={props.handleOpenPopup}
-        wordsCompare={wordsCompare}
-        isChecked={isChecked}
-        searchShortMovies={searchShortMovies}
+        updateMovieList={updateMovieList}
       />
       {isOpenPreloader ? (
         <Preloader />
       ) : (
         <MoviesCardList
-          movieCard={visibleMovieCards}
-          handleSaveMovie={props.handleSaveMovie}
-          handleIndex={handleIndex}
-          films={filterMovies}
-          addLikeCard={addLikeCard}
-          handleAddNewMovieCard={handleAddNewMovieCard}
-          saveMovies={saveMovies}
+          favoriteMovies={favoriteMovies}
+          addNewFavoriteMovie={addNewFavoriteMovie}
+          removeFavoriteMovie={removeFavoriteMovie}
+          visibleMovies={visibleMovies}
+          hiddenMovies={hiddenMovies}
+          showMore={showMore}
         />
       )}
     </section>
