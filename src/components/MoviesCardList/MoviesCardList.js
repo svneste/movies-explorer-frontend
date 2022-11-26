@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./MoviesCardList.css";
 import MovieCard from "../MoviesCard/MoviesCard";
@@ -6,11 +6,6 @@ import MovieCard from "../MoviesCard/MoviesCard";
 function MoviesCardList(props) {
   const [isLike, setIsLike] = useState(false);
   const { pathname } = useLocation();
-
-  function handleLike(card) {
-    setIsLike(!isLike);
-    console.log(card);
-  }
 
   function handleIndex() {
     props.handleIndex();
@@ -21,12 +16,15 @@ function MoviesCardList(props) {
       <ul className="moviescardlist__items">
         {props.movieCard.map((item, id) => (
           <MovieCard
-            handleAddNewMovieCard={props.handleAddNewMovieCard}
             card={item}
             key={id}
             handleSaveMovie={props.handleSaveMovie}
-            handleLike={handleLike}
             isLike={isLike}
+            saveMovies={props.saveMovies}
+            handleSaceMovies={props.handleSaceMovies}
+            addLikeCard={props.addLikeCard}
+            handleAddNewMovieCard={props.handleAddNewMovieCard}
+            films={props.films}
           />
         ))}
       </ul>

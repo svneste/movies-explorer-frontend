@@ -37,9 +37,9 @@ function SearchForm({
     }
   }
 
-  useEffect(() => {
-    setChecked(isChecked);
-  }, [isChecked]);
+  // useEffect(() => {
+  //   setChecked(isChecked);
+  // }, [isChecked]);
 
   return (
     <section className="searchform">
@@ -63,8 +63,9 @@ function SearchForm({
         <label className="search__toogle-container">
           <input
             name="checked"
-            defaultValue={checked}
+            //defaultValue='false'
             defaultChecked={checked}
+           // checked='checked'
             onChange={handleChecked}
             className="search__checkbox"
             type="checkbox"

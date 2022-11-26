@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "./UserInfo.css";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import isEmail from "validator/es/lib/isEmail";
+import Preloader from "../Preloader/Preloader";
 
-function UserInfo({ handleOutSign, handleUpdateUser }) {
+function UserInfo({ handleOutSign, handleUpdateUser, isOpenPreloader }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [values, setValues] = useState({
@@ -26,7 +27,6 @@ function UserInfo({ handleOutSign, handleUpdateUser }) {
       }
     }
 
-
     if (name === "email") {
       if (!isEmail(value)) {
         target.setCustomValidity("Некорректый адрес почты");
@@ -35,12 +35,10 @@ function UserInfo({ handleOutSign, handleUpdateUser }) {
       }
     }
 
-
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: target.validationMessage });
     setIsValid(target.closest("form").checkValidity());
   };
-
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -52,46 +50,53 @@ function UserInfo({ handleOutSign, handleUpdateUser }) {
 
   return (
     <section className="userinfo">
-      <form onSubmit={handleSubmit}>
-        <h2 className="userinfo__title">Привет, {currentUser.name}</h2>
-        <div className="userinfo_container-name">
-          <p className="userinfo__name">Имя</p>
-          <input
-            onChange={handleChange}
-            name="name"
-            id="name"
-            defaultValue={currentUser.name}
-            className="userinfo__name-value"
-          ></input>
-        </div>
-
-        <div className="userinfo_container-email">
-          <p className="userinfo__email">E-mail</p>
-          <div>
+      {isOpenPreloader ? (
+        <Preloader />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h2 className="userinfo__title">Привет, {currentUser.name}</h2>
+          <div className="userinfo_container-name">
+            <p className="userinfo__name">Имя</p>
             <input
               onChange={handleChange}
-              defaultValue={currentUser.email}
-              name="email"
-              id="email"
-              className="userinfo__email-value"
+              name="name"
+              id="name"
+              defaultValue={currentUser.name}
+              className="userinfo__name-value"
             ></input>
-            <p className="form__error-message">{errors.email}</p>
           </div>
-        </div>
-        <div className="userinfo_container-button">
-          <button
-            type="submit"
-            aria-label="save"
-            className="userinfo__button-edit"
-            disabled={!isValid}
-          >
-            Редактировать
-          </button>
-          <button onClick={handleOutSign} className="userinfo__button-signout">
-            Выйти из аккаунта
-          </button>
-        </div>
-      </form>
+
+          <div className="userinfo_container-email">
+            <p className="userinfo__email">E-mail</p>
+            <div>
+              <input
+                onChange={handleChange}
+                defaultValue={currentUser.email}
+                name="email"
+                id="email"
+                className="userinfo__email-value"
+              ></input>
+              <p className="form__error-message">{errors.email}</p>
+            </div>
+          </div>
+          <div className="userinfo_container-button">
+            <button
+              type="submit"
+              aria-label="save"
+              className="userinfo__button-edit"
+              disabled={!isValid}
+            >
+              Редактировать
+            </button>
+            <button
+              onClick={handleOutSign}
+              className="userinfo__button-signout"
+            >
+              Выйти из аккаунта
+            </button>
+          </div>
+        </form>
+      )}
     </section>
   );
 }

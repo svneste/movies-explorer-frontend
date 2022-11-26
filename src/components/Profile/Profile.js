@@ -4,7 +4,7 @@ import './Profile.css';
 import UserInfo from '../UserInfo/UserInfo';
 
 
-function Profile({ handleOutSign, handleUpdateUser }) {
+function Profile({ handleOutSign, handleUpdateUser, isOpenPreloader }) {
   return (
     <div>
 

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./MoviesCard.css";
 
 function MovieCard(props) {
   const { pathname } = useLocation();
+  const  [saveCards, setSavecards] = useState(false);
 
   let imageURL;
   let movieCard = props.card;
+
 
   if (pathname === "/saved-movies") {
     imageURL = props.card.image;
@@ -19,9 +21,9 @@ function MovieCard(props) {
   }
 
   function addNewMovie() {
-    props.handleAddNewMovieCard(props.card);
-    props.handleSaveMovie(movieCard);
-    props.handleLike(movieCard);
+    props.handleAddNewMovieCard(movieCard);
+
+    setSavecards(props.addLikeCard);
   }
 
   function deleteCardMovie() {
@@ -45,7 +47,7 @@ function MovieCard(props) {
           type="button"
           onClick={addNewMovie}
           className={`moviescardlist__savebutton ${
-            props.isLike &&
+            saveCards &&
             "moviescardlist__savebutton-hidden moviescardlist-icon"
           }`}
         ></button>

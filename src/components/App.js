@@ -1,12 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import {
-  Routes,
-  Route,
-  useLocation,
-  useHistory,
-  Switch,
-} from "react-router-dom";
+import { Route, useLocation, useHistory, Switch } from "react-router-dom";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import Main from "./Main/Main";
@@ -25,7 +19,6 @@ import Preloader from "./Preloader/Preloader";
 
 function App() {
   const { pathname } = useLocation();
-  const [saveMoviesCard, setSaveMoviesCard] = useState([]);
   const [filmsLike, setFilmsLike] = useState(false);
   const [textPopup, setTextPopup] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
@@ -53,7 +46,6 @@ function App() {
     }
   }, [loggedIn]);
 
-
   function getUserInfo() {
     api
       .getUserInfo()
@@ -62,7 +54,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
   }
 
   const handleRegister = (name, email, password) => {
@@ -71,10 +63,13 @@ function App() {
       .register(name, email, password)
       .then(() => {
         setIsOpenPreloader(false);
+        handleAutorize(email, password);
         handleOpenPopup("Вы успешно зарегистрированы");
-        history("/movies");
+        history.push("/movies");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        handleOpenPopup("Ошибка регистрации");
+      })
       .finally(() => {
         setIsOpenPreloader(false);
       });
@@ -96,13 +91,16 @@ function App() {
         }
       })
       .catch(() => {
-        console.log("возникла ошибка");
+        handleOpenPopup("Ошибка на сервере");
+        setIsOpenPreloader(false);
+
       });
   };
 
   function handleUpdateUser(name, email) {
     api.editUserProfile(name, email).then(
       (res) => {
+        setCurrentUser(res);
         handleOpenPopup("Данные обновлены");
       },
       (err) => {
@@ -123,20 +121,20 @@ function App() {
 
   // Сохранение карточки фильма, добавление карточки в избранное
 
-  function handleAddNewMovieCard(data) {
-    api
-      .addNewMovie(data) //обращаемся к API - сохраняем нашу карточку в БД
-      .then((res) => {
-        //нужно показать что карточка была сохранена
-        setSaveMoviesCard([res, ...saveMoviesCard]);
-      })
-      .catch((err) => console.log(err));
-  }
+  // function handleAddNewMovieCard(data) {
+  //   api
+  //     .addNewMovie(data) //обращаемся к API - сохраняем нашу карточку в БД
+  //     .then((res) => {
+  //       //нужно показать что карточка была сохранена
+  //       setSaveMoviesCard([res, ...saveMoviesCard]);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
 
-  function handleSaveMovie(movie) {
-    console.log(movie);
-    setFilmsLike(!filmsLike);
-  }
+  // function handleSaveMovie(movie) {
+  //   console.log(movie);
+  //   setFilmsLike(!filmsLike);
+  // }
 
   // Удаление карточки из сохраненных
   function handleRemoveMovieCard(id) {
@@ -187,17 +185,16 @@ function App() {
           <ProtectedRoute
             path="/movies"
             component={Movies}
-            handleAddNewMovieCard={handleAddNewMovieCard}
             handleOpenPopup={handleOpenPopup}
             isOpenPreloader={isOpenPreloader}
-            handleSaveMovie={handleSaveMovie}
+            // handleSaveMovie={handleSaveMovie}
             loggedIn={loggedIn}
           />
 
           <ProtectedRoute
             path="/saved-movies"
             component={SavedMovies}
-            saveMoviesCard={saveMoviesCard}
+            // saveMoviesCard={saveMoviesCard}
             handleRemoveMovieCard={handleRemoveMovieCard}
             handleOpenPopup={handleOpenPopup}
             loggedIn={loggedIn}
@@ -209,6 +206,7 @@ function App() {
             handleOutSign={handleOutSign}
             handleUpdateUser={handleUpdateUser}
             loggedIn={loggedIn}
+            isOpenPreloader={isOpenPreloader}
           />
 
           <Route path="*">
