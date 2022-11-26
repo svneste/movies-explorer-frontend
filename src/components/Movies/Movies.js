@@ -15,8 +15,6 @@ function Movies(props) {
   const [visibleMovies, setVisibleMovies] = useState([]);
   const [hiddenMovies, setHiddenMovies] = useState([]);
 
-  console.log({favoriteMovies, allMovies, filteredMovies, visibleMovies, hiddenMovies});
-
   useEffect(() => {
     let localStorageAllMovies = localStorage.getItem("allMovies");
 
@@ -54,8 +52,6 @@ function Movies(props) {
 
     setHiddenMovies(clonedFilteredMovies);
   }, [filteredMovies, conutMovies]);
-
-  console.log({filteredMovies});
 
   useEffect(() => {
     setConutMovies(getMoviesCount());

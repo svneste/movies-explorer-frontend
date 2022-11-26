@@ -11,63 +11,11 @@ function SavedMovies(props) {
   const [isOpenPreloader, setIsOpenPreloader] = useState(false);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   let filter = [];
-
-  useEffect(() => {
-    setIsOpenPreloader(true);
-    api
-      .getSaveMoviesCard()
-      .then((res) => {
-        setSaveMoviesCard(res);
-        setIsOpenPreloader(false);
-        localStorage.setItem("saveFilms", JSON.stringify(res));
-
-
-      })
-      .catch((err) => {
-        console.log(err);
-        props.handleOpenPopup("Произошла ошибка, возможно проблема с сервером ");
-      })
-  }, []);
-
-  async function searchInSaveMovies(wordsCompare) {
-    if (wordsCompare) {
-      filter = saveMoviesCard.filter(function (item) {
-        return item.nameRU.toLowerCase().includes(wordsCompare.toLowerCase());
-      });
-      setSaveMoviesCard(filter);
-    } else {
-      props.handleOpenPopup('Нужно ввести ключевое слово');
-    }
-
-  }
-
-  // function deleteCardInArr (id) {
-  //   let newArrDeleteCard = [];
-  //   console.log(id);
-  //   console.log(saveMoviesCard);
-  //   saveMoviesCard.forEach(function(obj) {
-  //     if (obj._id !== id) {
-  //       newArrDeleteCard.push(obj);
-  //     } else {
-  //       console.log(localStorage.getItem.saveFilms);
-  //     }
-  //     setSaveMoviesCard(newArrDeleteCard);
-
-  //   })
-  // }
-
-   async function removeFavoriteMovie(movie) {
-    const favoriteMovie = favoriteMovies.find(
-      (someMovie) => someMovie.movieId === movie.id
-    );
-    if (favoriteMovie) {
-      await api.removeMovieCard(favoriteMovie._id);
-      await fetchFavoriteMovies();
-    }
-  }
+  const checked = localStorage.getItem("checked") === "true";
 
   useEffect(() => {
     fetchFavoriteMovies();
+
   }, []);
 
   async function fetchFavoriteMovies() {
@@ -78,6 +26,46 @@ function SavedMovies(props) {
       props.handleOpenPopup("При сохранении карточки возникла ошибка");
     }
   }
+
+  async function searchInSaveMovies(wordsCompare) {
+    if (wordsCompare) {
+      filter = saveMoviesCard.filter(function (item) {
+        return item.nameRU.toLowerCase().includes(wordsCompare.toLowerCase());
+      });
+      setSaveMoviesCard(filter);
+    } else {
+      props.handleOpenPopup('Нужно ввести ключевое слово');
+    }
+  }
+
+   async function removeFavoriteMovie(movie) {
+    const favoriteMovie = favoriteMovies.find(
+      (someMovie) => someMovie.movieId === movie.movieId
+    );
+    if (favoriteMovie) {
+      await api.removeMovieCard(favoriteMovie._id);
+      await fetchFavoriteMovies();
+    }
+  }
+
+  async function updateMovieList() {
+    let filtredSaveMovies = [];
+    filtredSaveMovies = favoriteMovies.filter((item) => item.duration <= 40);
+    setFavoriteMovies(filtredSaveMovies);
+
+  }
+
+  useEffect(() => {
+    if (checked) {
+      let filtredSaveMovies = [];
+      filtredSaveMovies = favoriteMovies.filter((item) => item.duration <= 40);
+      setFavoriteMovies(filtredSaveMovies);
+    } else {
+      fetchFavoriteMovies();
+    }
+
+  }, [checked])
+
 
   function searchShortMovies(newChecked) {
     if (newChecked) {
@@ -96,26 +84,21 @@ function SavedMovies(props) {
 
   return (
     <section className="movies">
-      <SearchForm handleGetMovies={searchInSaveMovies} handleOpenPopup={props.handleOpenPopup} searchShortMovies={searchShortMovies}/>
+      <SearchForm handleGetMovies={searchInSaveMovies} handleOpenPopup={props.handleOpenPopup} searchShortMovies={searchShortMovies} updateMovieList={updateMovieList}/>
       <section className="moviescardlist">
         {isOpenPreloader ? (
           <Preloader />
         ) : (
           <ul className="moviescardlist__items">
-          {saveMoviesCard.map((item, id) => (
+          {favoriteMovies.map((item, id) => (
             <MovieCard
               card={item}
               key={id}
-              handleRemoveMovieCard={props.handleRemoveMovieCard}
               removeFavoriteMovie={removeFavoriteMovie}
             />
           ))}
         </ul>
         )}
-
-        {/* <div className="moviescardlist__nextmovies">
-          <button className="nextmovies__nextmovies-button">Еще</button>
-        </div> */}
       </section>
     </section>
   );

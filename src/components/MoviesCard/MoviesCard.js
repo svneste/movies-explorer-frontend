@@ -23,6 +23,7 @@ function MovieCard(props) {
   }
 
   function deleteCardMovie() {
+    console.log('отработал клик', movieCard);
     props.removeFavoriteMovie(movieCard);
   }
 
