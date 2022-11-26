@@ -30,7 +30,7 @@ function Movies(props) {
   useEffect(() => {
     if (Array.isArray(allMovies) && allMovies.length > 0) {
       const checked = localStorage.getItem("checked") === "true";
-      const textSearch = localStorage.getItem("textSearch");
+      const textSearch = localStorage.getItem("textSearch" || "");
 
       const filteredMovies = allMovies.filter(function (item) {
         return item.nameRU
