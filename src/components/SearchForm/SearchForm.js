@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 import "./SearchForm.css";
 
-function SearchForm({
-  updateMovieList,
-  handleOpenPopup,
-}) {
+function SearchForm({ updateMovieList, handleOpenPopup }) {
+  const { pathname } = useLocation();
 
-  const [checked, setChecked] = useState(localStorage.getItem("checked") === "true");
+  const [checked, setChecked] = useState(
+    localStorage.getItem("checked") === "true"
+  );
 
-  const [textSearch, setTextSearch] = useState(localStorage.getItem("textSearch"));
+  const [textSearch, setTextSearch] = useState(
+    localStorage.getItem("textSearch")
+  );
 
   function handleChecked() {
-
     setChecked((prev) => {
       const newChecked = !prev;
       localStorage.setItem("checked", newChecked);
       return newChecked;
-    })
+    });
     updateMovieList();
   }
 
@@ -35,9 +38,18 @@ function SearchForm({
     }
   }
 
+  function handleSubmitSearchInSaveMovies(e) {
+    e.preventDefault();
+    if (!textSearch) {
+      handleOpenPopup("Нужно ввести ключевое слово");
+    } else {
+      updateMovieList(textSearch);
+    }
+  }
+
   return (
     <section className="searchform">
-      <form onSubmit={handleSubmit} className="search">
+      <form onSubmit={pathname === '/movies' ? handleSubmit : handleSubmitSearchInSaveMovies}className="search">
         <div className="search__input-container">
           <input
             onChange={handleTextChange}

@@ -17,7 +17,6 @@ function Movies(props) {
 
   useEffect(() => {
     let localStorageAllMovies = localStorage.getItem("allMovies");
-
     if (localStorageAllMovies) {
       setAllMovies(JSON.parse(localStorageAllMovies));
     } else {
@@ -29,12 +28,14 @@ function Movies(props) {
     if (Array.isArray(allMovies) && allMovies.length > 0) {
       const checked = localStorage.getItem("checked") === "true";
       const textSearch = localStorage.getItem("textSearch") || "";
-
-      const filteredMovies = allMovies.filter(function (item) {
-        return item.nameRU
-          .toLowerCase()
-          .includes(textSearch.toLowerCase().trim());
-      });
+      let filteredMovies = [];
+      if (textSearch !== "") {
+        filteredMovies = allMovies.filter(function (item) {
+          return item.nameRU
+            .toLowerCase()
+            .includes(textSearch.toLowerCase().trim());
+        });
+      }
 
       if (checked) {
         setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40));
@@ -101,10 +102,8 @@ function Movies(props) {
 
   function showMore() {
     const clonedFilteredMovies = [...filteredMovies];
-
     const newVisibleMovies = clonedFilteredMovies.splice(0, conutMovies[1] + visibleMovies.length);
     setVisibleMovies(newVisibleMovies);
-
     setHiddenMovies(clonedFilteredMovies);
   }
 

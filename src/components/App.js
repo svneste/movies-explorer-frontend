@@ -15,11 +15,9 @@ import api from "../utils/MainApi";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Popup from "./Popup/Popup";
-import Preloader from "./Preloader/Preloader";
 
 function App() {
   const { pathname } = useLocation();
-  const [filmsLike, setFilmsLike] = useState(false);
   const [textPopup, setTextPopup] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -93,7 +91,6 @@ function App() {
       .catch(() => {
         handleOpenPopup("Ошибка на сервере");
         setIsOpenPreloader(false);
-
       });
   };
 
@@ -109,34 +106,16 @@ function App() {
     );
   }
 
-  // Выход из аккаунта пользователя
-
   function handleOutSign() {
     setLoggedIn(false);
     localStorage.removeItem("token");
-    localStorage.removeItem("wordsCompare");
-    localStorage.removeItem("films");
+    localStorage.removeItem("textSearch");
+    localStorage.removeItem("allMovies");
+    localStorage.removeItem("saveFilms");
+    localStorage.removeItem("checked");
     history.push("/");
   }
 
-  // Сохранение карточки фильма, добавление карточки в избранное
-
-  // function handleAddNewMovieCard(data) {
-  //   api
-  //     .addNewMovie(data) //обращаемся к API - сохраняем нашу карточку в БД
-  //     .then((res) => {
-  //       //нужно показать что карточка была сохранена
-  //       setSaveMoviesCard([res, ...saveMoviesCard]);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
-
-  // function handleSaveMovie(movie) {
-  //   console.log(movie);
-  //   setFilmsLike(!filmsLike);
-  // }
-
-  // Удаление карточки из сохраненных
   function handleRemoveMovieCard(id) {
     api
       .removeMovieCard(id)
@@ -187,14 +166,12 @@ function App() {
             component={Movies}
             handleOpenPopup={handleOpenPopup}
             isOpenPreloader={isOpenPreloader}
-            // handleSaveMovie={handleSaveMovie}
             loggedIn={loggedIn}
           />
 
           <ProtectedRoute
             path="/saved-movies"
             component={SavedMovies}
-            // saveMoviesCard={saveMoviesCard}
             handleRemoveMovieCard={handleRemoveMovieCard}
             handleOpenPopup={handleOpenPopup}
             loggedIn={loggedIn}
