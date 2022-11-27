@@ -8,17 +8,16 @@ import Preloader from "../Preloader/Preloader";
 function SavedMovies(props) {
   const [isOpenPreloader, setIsOpenPreloader] = useState(false);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
-  let filter = [];
-  const checked = localStorage.getItem("checked") === "true";
-  const textSearch = localStorage.getItem("textSearch") || "";
 
   useEffect(() => {
+    setIsOpenPreloader(true);
     fetchFavoriteMovies();
   }, []);
 
   async function fetchFavoriteMovies() {
     try {
       const favoriteMovies = await api.getSaveMoviesCard();
+      setIsOpenPreloader(false);
       setFavoriteMovies(favoriteMovies);
     } catch (err) {
       props.handleOpenPopup("При сохранении карточки возникла ошибка");
@@ -37,15 +36,21 @@ function SavedMovies(props) {
 
   async function updateMovieList(textSearch) {
     let filteredMovies = [];
-    let filtredSaveMovies = [];
-    filtredSaveMovies = favoriteMovies.filter((item) => item.duration <= 40);
-    console.log(filtredSaveMovies);
-    setFavoriteMovies(filtredSaveMovies);
     if (textSearch !== "") {
       filteredMovies = favoriteMovies.filter(function (item) {
         return item.nameRU.toLowerCase().includes(textSearch.toLowerCase().trim());
       })
       setFavoriteMovies(filteredMovies);
+    } else  {
+      fetchFavoriteMovies();
+    }
+  }
+
+  function filtredSaveShortMovies (checked) {
+    let filtredSaveMovies = [];
+    if (checked) {
+      filtredSaveMovies = favoriteMovies.filter((item) => item.duration <= 40);
+      setFavoriteMovies(filtredSaveMovies);
     } else {
       fetchFavoriteMovies();
     }
@@ -56,6 +61,7 @@ function SavedMovies(props) {
       <SearchForm
         handleOpenPopup={props.handleOpenPopup}
         updateMovieList={updateMovieList}
+        filtredSaveShortMovies={filtredSaveShortMovies}
       />
       <section className="moviescardlist">
         {isOpenPreloader ? (

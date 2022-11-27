@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import "./SearchForm.css";
 
-function SearchForm({ updateMovieList, handleOpenPopup }) {
+function SearchForm({ updateMovieList, handleOpenPopup, filtredSaveShortMovies }) {
   const { pathname } = useLocation();
 
   const [checked, setChecked] = useState(
@@ -21,6 +21,12 @@ function SearchForm({ updateMovieList, handleOpenPopup }) {
       return newChecked;
     });
     updateMovieList();
+  }
+
+  function handleCheckedInSavedMovies(evt) {
+    setChecked(!checked);
+
+    filtredSaveShortMovies(checked);
   }
 
   function handleTextChange(e) {
@@ -64,8 +70,8 @@ function SearchForm({ updateMovieList, handleOpenPopup }) {
         <label className="search__toogle-container">
           <input
             name="checked"
-            defaultChecked={checked}
-            onChange={handleChecked}
+            defaultChecked={pathname === '/saved-movies' ? false : checked}
+            onChange={pathname === '/movies' ? handleChecked : handleCheckedInSavedMovies}
             className="search__checkbox"
             type="checkbox"
           />
