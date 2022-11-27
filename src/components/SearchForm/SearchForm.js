@@ -40,11 +40,7 @@ function SearchForm({ updateMovieList, handleOpenPopup }) {
 
   function handleSubmitSearchInSaveMovies(e) {
     e.preventDefault();
-    if (!textSearch) {
-      handleOpenPopup("Нужно ввести ключевое слово");
-    } else {
-      updateMovieList(textSearch);
-    }
+    updateMovieList(textSearch);
   }
 
   return (
@@ -59,7 +55,6 @@ function SearchForm({ updateMovieList, handleOpenPopup }) {
             placeholder="Фильм"
             type="text"
             value={textSearch || ""}
-            required
           />
           <button type="submit" className="search__button">
             Найти

@@ -46,6 +46,8 @@ function SavedMovies(props) {
         return item.nameRU.toLowerCase().includes(textSearch.toLowerCase().trim());
       })
       setFavoriteMovies(filteredMovies);
+    } else {
+      fetchFavoriteMovies();
     }
   }
 
