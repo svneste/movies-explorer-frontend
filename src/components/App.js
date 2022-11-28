@@ -34,7 +34,12 @@ function App() {
           setLoggedIn(true);
           history.push("/movies");
         })
-        .catch((err) => console.log(err));
+        .catch(
+          (err) =>  {
+            console.log(err);
+          });
+    } else {
+      handleOutSign();
     }
   }, []);
 
