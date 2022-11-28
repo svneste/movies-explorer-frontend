@@ -53,7 +53,7 @@ function Login({ handleAutorize, isOpenPreloader }) {
             id="email"
             className="form__input"
             type="email"
-            required
+
           />
           <p className="form__error-message">{errors.email}</p>
           <label className="form__label">Пароль</label>

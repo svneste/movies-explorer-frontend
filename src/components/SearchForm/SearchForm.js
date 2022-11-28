@@ -60,7 +60,7 @@ function SearchForm({ updateMovieList, handleOpenPopup, filtredSaveShortMovies }
             className="search__input"
             placeholder="Фильм"
             type="text"
-            value={textSearch || ""}
+            defaultValue={pathname === '/saved-movies' ? "" : textSearch || ""}
           />
           <button type="submit" className="search__button">
             Найти

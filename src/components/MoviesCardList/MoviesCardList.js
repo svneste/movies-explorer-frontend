@@ -19,10 +19,10 @@ function MoviesCardList({
   return (
     <section className="moviescardlist">
       <ul className="moviescardlist__items">
-        {Array.isArray(visibleMovies) && visibleMovies.map((item, id) => (
+        {Array.isArray(visibleMovies) && visibleMovies.map((item) => (
           <MovieCard
             card={item}
-            key={id}
+            key={item.id}
             isFavorite={checkMovieFavorite(favoriteMovies, item)}
             handleAddNewMovieCard={addNewFavoriteMovie}
             removeFavoriteMovie={removeFavoriteMovie}

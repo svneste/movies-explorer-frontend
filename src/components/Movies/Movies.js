@@ -19,8 +19,6 @@ function Movies(props) {
     let localStorageAllMovies = localStorage.getItem("allMovies");
     if (localStorageAllMovies) {
       setAllMovies(JSON.parse(localStorageAllMovies));
-    } else {
-      updateMovieList();
     }
   }, []);
 
@@ -36,6 +34,9 @@ function Movies(props) {
             .includes(textSearch.toLowerCase().trim());
         });
       }
+      if (filteredMovies.length === 0) {
+        props.handleOpenPopup("Ничего не найдено");
+      };
 
       if (checked) {
         setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40));
@@ -70,7 +71,7 @@ function Movies(props) {
     const MoviesConfig = {
       1280: [12, 3],
       758: [8, 2],
-      320: [5, 1],
+      320: [5, 2],
     };
 
     Object.keys(MoviesConfig)
@@ -134,7 +135,7 @@ function Movies(props) {
       (someMovie) => someMovie.movieId === movie.id
     );
     if (favoriteMovie) {
-      await api.removeMovieCard(favoriteMovie._id);
+      await api.removeMonnnnnnnnvieCard(favoriteMovie._id);
       await fetchFavoriteMovies();
     }
   }
