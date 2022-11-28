@@ -4,11 +4,11 @@ import './Profile.css';
 import UserInfo from '../UserInfo/UserInfo';
 
 
-function Profile() {
+function Profile({ handleOutSign, handleUpdateUser, isOpenPreloader }) {
   return (
     <div>
 
-      <UserInfo />
+      <UserInfo handleOutSign={handleOutSign} handleUpdateUser={handleUpdateUser} />
     </div>
   )
 }

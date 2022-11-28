@@ -5,15 +5,9 @@ import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 import NavAuth from "../NavAuth/NavAuth";
 
-function Header() {
+function Header(props) {
   const { pathname } = useLocation();
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    if (pathname === "/movies" || pathname === "/saved-movies") {
-      setLoggedIn(true);
-    }
-  });
+  const tre = true;
 
   return (
     <header className={`header ${pathname !== "/" ? "header__icon_menu" : ""}`}>
@@ -21,7 +15,7 @@ function Header() {
         <img src={logo} alt="Логотип компании" className="header__logo" />
       </Link>
 
-      {loggedIn ? <Navigation /> : <NavAuth />}
+      {props.loggedIn ? <Navigation /> : <NavAuth />}
     </header>
   );
 }

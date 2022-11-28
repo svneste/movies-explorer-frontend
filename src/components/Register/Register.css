@@ -24,16 +24,17 @@
   font-size: 10px;
   color: #A0A0A0;
   line-height: 12.1px;
-  margin-bottom: 5px;
+  margin-top: 19px;
 }
 
 .form__input {
   border: none;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   height: 27px;
   border-bottom: 1px solid #E8E8E8;
   padding: 3px;
   font-size: 14px;
+
 }
 
 .form__input:focus {
@@ -63,6 +64,11 @@
   opacity: 0.4;
 }
 
+.form__button-signup:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .form__label-signup {
   margin: 0;
   text-align: center;
@@ -72,10 +78,13 @@
 }
 
 .form__error-message {
+  height: 0;
+  overflow: visible;
   margin: 0;
   font-size: 10px;
   color: #FF4062;
   margin-top: 6px;
+  /* margin-bottom: 24px; */
 }
 
 .form__label-signup-link {

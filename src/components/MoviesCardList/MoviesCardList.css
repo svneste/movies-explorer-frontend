@@ -13,11 +13,6 @@
   flex-wrap: wrap;
 }
 
-.moviescardlist__item {
-  max-width: 360px;
-  margin-top: 60px;
-  position: relative;
-}
 
 .moviescard__name {
   margin: 0;
@@ -134,10 +129,6 @@
   .moviescard__info {
     max-width: 90%;
   }
-
-  /* .moviescardlis__image-container {
-    max-width: 90%;
-  } */
 
   .moviescardlist__pic {
 

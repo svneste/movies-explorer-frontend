@@ -50,7 +50,7 @@ function Navigation() {
               <li className="navigation__item">
                 <NavLink
                   to="/movies"
-                  className="navigation__link"
+                  className={ ({ isActive }) =>  isActive ? "navigation__link_active" : "navigation__link"}
                   activeClassName="navigation__link_active"
                 >
                   Фильмы
@@ -59,6 +59,7 @@ function Navigation() {
               <li className="navigation__item">
                 <NavLink
                   to="/saved-movies"
+                  className={ ({ isActive }) =>  isActive ? "navigation__link_active" : "navigation__link"}
                   activeClassName="navigation__link_active"
                 >
                   Сохраненные фильмы
@@ -71,8 +72,8 @@ function Navigation() {
                 <div className="navigation__link-profile-btn">
                   <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
                     <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
+                      fillRule="evenodd"
+                      clipRule="evenodd"
                       d="M7.4301 7.96781C8.79193 7.40572 9.75035 6.06478 9.75035 4.5C9.75035 2.42893 8.07141 0.75 6.00035 0.75C3.92928 0.75 2.25035 2.42893 2.25035 4.5C2.25035 6.06473 3.20869 7.40563 4.57045 7.96775C3.1758 8.19993 1.89287 8.76594 0.808594 9.58058L2.19015 11.4194C3.25143 10.6221 4.56898 10.15 6.0001 10.15C7.43122 10.15 8.74877 10.6221 9.81006 11.4194L11.1916 9.58058C10.1074 8.76601 8.82462 8.20003 7.4301 7.96781Z"
                       fill="black"
                     />

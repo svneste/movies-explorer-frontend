@@ -1,54 +1,85 @@
-import React from 'react';
-import SearchForm from '../SearchForm/SearchForm';
-import film1 from '../../images/film1.svg';
-import film2 from '../../images/film2.svg';
-import film3 from '../../images/film3.svg';
-import iconSuccess from '../../images/success.svg';
-// import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import './SavedMovies.css';
+import React, { useEffect, useState } from "react";
+import SearchForm from "../SearchForm/SearchForm";
+import MovieCard from "../MoviesCard/MoviesCard";
+import "./SavedMovies.css";
+import api from "../../utils/MainApi";
+import Preloader from "../Preloader/Preloader";
 
-function SavedMovies() {
+function SavedMovies(props) {
+  const [isOpenPreloader, setIsOpenPreloader] = useState(false);
+  const [favoriteMovies, setFavoriteMovies] = useState([]);
+
+  useEffect(() => {
+    setIsOpenPreloader(true);
+    fetchFavoriteMovies();
+  }, []);
+
+  async function fetchFavoriteMovies() {
+    try {
+      const favoriteMovies = await api.getSaveMoviesCard();
+      setIsOpenPreloader(false);
+      setFavoriteMovies(favoriteMovies);
+    } catch (err) {
+      props.handleOpenPopup("При сохранении карточки возникла ошибка");
+    }
+  }
+
+  async function removeFavoriteMovie(movie) {
+    const favoriteMovie = favoriteMovies.find(
+      (someMovie) => someMovie.movieId === movie.movieId
+    );
+    if (favoriteMovie) {
+      await api.removeMovieCard(favoriteMovie._id);
+      await fetchFavoriteMovies();
+    }
+  }
+
+  async function updateMovieList(textSearch) {
+    let filteredMovies = [];
+    if (textSearch !== "") {
+      filteredMovies = favoriteMovies.filter(function (item) {
+        return item.nameRU.toLowerCase().includes(textSearch.toLowerCase().trim());
+      })
+      setFavoriteMovies(filteredMovies);
+    } else  {
+      fetchFavoriteMovies();
+    }
+  }
+
+  function filtredSaveShortMovies (checked) {
+    let filtredSaveMovies = [];
+    if (checked) {
+      filtredSaveMovies = favoriteMovies.filter((item) => item.duration <= 40);
+      setFavoriteMovies(filtredSaveMovies);
+    } else {
+      fetchFavoriteMovies();
+    }
+  }
+
   return (
-    <section className='movies'>
-      <SearchForm />
+    <section className="movies">
+      <SearchForm
+        handleOpenPopup={props.handleOpenPopup}
+        updateMovieList={updateMovieList}
+        filtredSaveShortMovies={filtredSaveShortMovies}
+      />
       <section className="moviescardlist">
-      <ul className="moviescardlist__items">
-        <li className="moviescardlist__item">
-          <img src={film1} className="moviescardlist__pic" alt="картинка 1" />
-          <button className="moviescardlist-icon-delete" ></button>
-          <div className="moviescard__info">
-            <p className="moviescard__name">33 слова о дизайне</p>
-            <p className="moviescard__duration">1ч 17м</p>
-          </div>
-        </li>
-
-        <li className="moviescardlist__item">
-          <img src={film2} className="moviescardlist__pic" alt="картинка 1" />
-          <button className="moviescardlist-icon-delete" ></button>
-          <div className="moviescard__info">
-            <p className="moviescard__name">Киноальманах «100 лет дизайна»</p>
-            <p className="moviescard__duration">1ч 17м</p>
-          </div>
-        </li>
-
-        <li className="moviescardlist__item">
-          <img src={film3} className="moviescardlist__pic" alt="картинка 1" />
-          <button className="moviescardlist-icon-delete" ></button>
-          <div className="moviescard__info">
-            <p className="moviescard__name">В погоне за Бенкси</p>
-            <p className="moviescard__duration">1ч 17м</p>
-          </div>
-        </li>
-
-      </ul>
-      <div className="moviescardlist__nextmovies">
-        <button className="nextmovies__nextmovies-button">Еще</button>
-      </div>
+        {isOpenPreloader ? (
+          <Preloader />
+        ) : (
+          <ul className="moviescardlist__items">
+            {favoriteMovies.map((item, id) => (
+              <MovieCard
+                card={item}
+                key={id}
+                removeFavoriteMovie={removeFavoriteMovie}
+              />
+            ))}
+          </ul>
+        )}
+      </section>
     </section>
-
-    </section>
-  )
+  );
 }
-
 
 export default SavedMovies;

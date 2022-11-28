@@ -7,7 +7,7 @@ function AboutMe() {
     <section className="aboutme" id="about-me">
       <h2 className="about__title">Студент</h2>
 
-      <artical className="profile">
+      <div className="profile">
         <div className="profile__info">
           <h3 className="profile__name">Виталий</h3>
           <p className="profile__job">Фронтенд-разработчик, 30 лет</p>
@@ -26,7 +26,7 @@ function AboutMe() {
         <div className="profile__avatar">
           <img src={avatar} alt="Аватар автора" />
         </div>
-      </artical>
+      </div>
     </section>
   );
 }
