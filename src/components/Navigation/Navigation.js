@@ -51,6 +51,7 @@ function Navigation() {
                 <NavLink
                   to="/movies"
                   className={ ({ isActive }) =>  isActive ? "navigation__link_active" : "navigation__link"}
+                  activeClassName="navigation__link_active"
                 >
                   Фильмы
                 </NavLink>
@@ -59,6 +60,7 @@ function Navigation() {
                 <NavLink
                   to="/saved-movies"
                   className={ ({ isActive }) =>  isActive ? "navigation__link_active" : "navigation__link"}
+                  activeClassName="navigation__link_active"
                 >
                   Сохраненные фильмы
                 </NavLink>
